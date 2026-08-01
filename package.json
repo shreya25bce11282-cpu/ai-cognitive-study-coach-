@@ -1,15 +1,15 @@
 {
-  \"name\": \"ai-cognitive-study-coach-\",
-  \"version\": \"1.0.0\",
-  \"description\": \"AI-powered study session tracker with cognitive insights\",
-  \"private\": true,
-  \"scripts\": {
-    \"dev\": \"concurrently --kill-others \\\"npm run dev:server\\\" \\\"npm run dev:frontend\\\"\",
-    \"dev:server\": \"cd server && node src/app.js\",
-    \"dev:frontend\": \"cd frontend && npm run dev\",
-    \"install:all\": \"npm install && cd server && npm install && cd ../frontend && npm install\"
+  "name": "ai-cognitive-study-coach-",
+  "version": "1.0.0",
+  "description": "AI-powered study session tracker with cognitive insights",
+  "private": true,
+  "scripts": {
+    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:frontend\"",
+    "dev:server": "cd server && node src/app.js",
+    "dev:frontend": "cd frontend && npm run dev",
+    "install:all": "npm install && cd server && npm install && cd ../frontend && npm install"
   },
-  \"devDependencies\": {
-    \"concurrently\": \"^9.1.2\"
+  "devDependencies": {
+    "concurrently": "^9.1.2"
   }
 }
