@@ -1,15 +1,21 @@
 {
-  "name": "ai-cognitive-study-coach-",
-  "version": "1.0.0",
-  "description": "AI-powered study session tracker with cognitive insights",
+  "name": "ai-cognitive-study-coach--server",
+  "version": "2.0.0",
   "private": true,
   "scripts": {
-    "dev": "concurrently --kill-others \"npm run dev:server\" \"npm run dev:frontend\"",
-    "dev:server": "cd server && node src/app.js",
-    "dev:frontend": "cd frontend && npm run dev",
-    "install:all": "npm install && cd server && npm install && cd ../frontend && npm install"
+    "dev": "node src/app.js",
+    "start": "node src/app.js"
   },
-  "devDependencies": {
-    "concurrently": "^9.1.2"
+  "dependencies": {
+    "@google/generative-ai": "^0.21.0",
+    "cors": "^2.8.5",
+    "dotenv": "^16.4.7",
+    "express": "^4.21.2",
+    "express-rate-limit": "^7.5.0",
+    "helmet": "^8.0.0",
+    "morgan": "^1.10.0",
+    "pg": "^8.13.1",
+    "uuid": "^11.0.5",
+    "zod": "^3.24.2"
   }
 }

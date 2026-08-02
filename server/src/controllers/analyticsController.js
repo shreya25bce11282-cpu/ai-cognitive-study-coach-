@@ -292,6 +292,69 @@ async function recommendStudyPlan(req, res, next) {
   }
 }
 
+// GET /api/analytics/weekly-trends — 4-week rolling focus/fatigue averages
+async function getWeeklyTrends(req, res, next) {
+  try {
+    const { rows } = await db.query(`
+      SELECT
+        date_trunc('week', started_at)::date AS week_start,
+        ROUND(AVG(focus_rating), 2)          AS avg_focus,
+        ROUND(AVG(fatigue_rating), 2)        AS avg_fatigue,
+        COUNT(*)::int                        AS session_count,
+        ROUND(SUM(duration_min) / 60.0, 1)   AS total_hours
+      FROM study_sessions
+      WHERE ended_at IS NOT NULL
+        AND started_at >= NOW() - INTERVAL '28 days'
+      GROUP BY week_start
+      ORDER BY week_start ASC
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// GET /api/analytics/heatmap — daily study minutes for the last 90 days
+async function getHeatmapData(req, res, next) {
+  try {
+    const { rows } = await db.query(`
+      SELECT
+        started_at::date                   AS day,
+        ROUND(SUM(duration_min), 0)::int   AS minutes,
+        COUNT(*)::int                      AS session_count
+      FROM study_sessions
+      WHERE ended_at IS NOT NULL
+        AND started_at >= NOW() - INTERVAL '90 days'
+      GROUP BY day
+      ORDER BY day ASC
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
+// GET /api/analytics/focus-decay — duration vs focus scatter data
+async function getFocusDecayCurve(req, res, next) {
+  try {
+    const { rows } = await db.query(`
+      SELECT
+        ROUND(duration_min, 0)::int AS duration_min,
+        focus_rating,
+        subject
+      FROM study_sessions
+      WHERE ended_at IS NOT NULL
+        AND duration_min IS NOT NULL
+        AND focus_rating IS NOT NULL
+      ORDER BY duration_min ASC
+      LIMIT 300
+    `);
+    res.json(rows);
+  } catch (err) {
+    next(err);
+  }
+}
+
 module.exports = {
   getSummary,
   getFatigue,
@@ -302,4 +365,7 @@ module.exports = {
   optimalSession,
   subjectPerformance,
   recommendStudyPlan,
+  getWeeklyTrends,
+  getHeatmapData,
+  getFocusDecayCurve,
 };

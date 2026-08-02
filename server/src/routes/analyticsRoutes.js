@@ -18,5 +18,8 @@ router.get('/predict-session', validate(subjectQuerySchema, 'query'), ctrl.predi
 router.get('/optimal-session', validate(subjectQuerySchema, 'query'), ctrl.optimalSession);
 router.get('/subject-performance', ctrl.subjectPerformance);
 router.get('/recommend-study-plan', ctrl.recommendStudyPlan);
+router.get('/weekly-trends', ctrl.getWeeklyTrends);
+router.get('/heatmap', ctrl.getHeatmapData);
+router.get('/focus-decay', ctrl.getFocusDecayCurve);
 
 module.exports = router;

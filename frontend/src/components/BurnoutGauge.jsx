@@ -1,9 +1,9 @@
 import React, { useEffect, useState } from 'react';
 
 const COLORS = {
-  LOW: { stroke: '#10b981', glow: 'rgba(16, 185, 129, 0.4)' },
-  MEDIUM: { stroke: '#f59e0b', glow: 'rgba(245, 158, 11, 0.4)' },
-  HIGH: { stroke: '#ef4444', glow: 'rgba(239, 68, 68, 0.4)' },
+  LOW: { stroke: '#10B981', glow: 'rgba(16, 185, 129, 0.4)' },
+  MEDIUM: { stroke: '#F59E0B', glow: 'rgba(245, 158, 11, 0.4)' },
+  HIGH: { stroke: '#FF6B6B', glow: 'rgba(255, 107, 107, 0.4)' },
 };
 
 export default function BurnoutGauge({ score = 0, risk = 'LOW' }) {
@@ -50,7 +50,7 @@ export default function BurnoutGauge({ score = 0, risk = 'LOW' }) {
         <text x="90" y="82" textAnchor="middle" fill={color.stroke} fontSize="36" fontWeight="700" fontFamily="Inter">
           {score}
         </text>
-        <text x="90" y="108" textAnchor="middle" fill="#8888aa" fontSize="13" fontWeight="500" fontFamily="Inter">
+        <text x="90" y="108" textAnchor="middle" fill="#64748B" fontSize="13" fontWeight="500" fontFamily="Inter">
           {risk} RISK
         </text>
       </svg>
