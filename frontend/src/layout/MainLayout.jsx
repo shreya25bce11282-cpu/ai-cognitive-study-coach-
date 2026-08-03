@@ -1,5 +1,6 @@
 import React, { useState, useCallback } from 'react';
 import { Toaster } from 'react-hot-toast';
+import { motion, AnimatePresence } from 'framer-motion';
 import Dashboard from '../pages/Dashboard';
 import Session from '../pages/Session';
 import History from '../pages/History';
@@ -7,6 +8,7 @@ import AICoach from '../pages/AICoach';
 import Progress from '../pages/Progress';
 import StreakFlame from '../components/StreakFlame';
 import AmbientSound from '../components/AmbientSound';
+import AuroraBackground from '../components/AuroraBackground';
 import useGamification from '../hooks/useGamification';
 import useKeyboardShortcuts from '../hooks/useKeyboardShortcuts';
 
@@ -17,6 +19,12 @@ const TABS = [
   { id: 'ai-coach', label: '🤖 AI Coach' },
   { id: 'progress', label: '🏆 Progress' },
 ];
+
+const pageVariants = {
+  initial: { opacity: 0, y: 14 },
+  animate: { opacity: 1, y: 0 },
+  exit: { opacity: 0, y: -10 },
+};
 
 export default function MainLayout() {
   const [activeTab, setActiveTab] = useState('dashboard');
@@ -53,6 +61,8 @@ export default function MainLayout() {
 
   return (
     <div className="app-layout">
+      <AuroraBackground />
+
       <Toaster
         position="top-right"
         toastOptions={{
@@ -65,21 +75,31 @@ export default function MainLayout() {
       />
       <header className="app-header">
         <div className="app-logo">
-          <span className="logo-icon">🧬</span>
+          <span className="logo-icon float-anim">🧬</span>
           <h1>Cognitive Study Coach</h1>
         </div>
 
         <nav className="nav-tabs">
-          {TABS.map((tab) => (
-            <button
-              key={tab.id}
-              id={`nav-${tab.id}`}
-              className={`nav-tab ${activeTab === tab.id ? 'active' : ''}`}
-              onClick={() => setActiveTab(tab.id)}
-            >
-              {tab.label}
-            </button>
-          ))}
+          {TABS.map((tab) => {
+            const isActive = activeTab === tab.id;
+            return (
+              <button
+                key={tab.id}
+                id={`nav-${tab.id}`}
+                className={`nav-tab ${isActive ? 'active' : ''}`}
+                onClick={() => setActiveTab(tab.id)}
+              >
+                {isActive && (
+                  <motion.div
+                    layoutId="nav-pill"
+                    className="nav-tab-pill"
+                    transition={{ type: 'spring', stiffness: 500, damping: 34 }}
+                  />
+                )}
+                <span className="nav-tab-label">{tab.label}</span>
+              </button>
+            );
+          })}
         </nav>
 
         <div className="app-header-right">
@@ -90,7 +110,12 @@ export default function MainLayout() {
               <div className="xp-bar-header">
                 <span className="level-badge">Lv {stats.level}</span>
                 <div className="xp-bar-track">
-                  <div className="xp-bar-fill" style={{ width: `${progress}%` }} />
+                  <motion.div
+                    className="xp-bar-fill"
+                    initial={false}
+                    animate={{ width: `${progress}%` }}
+                    transition={{ duration: 0.8, ease: [0.4, 0, 0.2, 1] }}
+                  />
                 </div>
               </div>
             </>
@@ -98,8 +123,19 @@ export default function MainLayout() {
         </div>
       </header>
 
-      <main className="app-main" key={activeTab}>
-        {renderPage()}
+      <main className="app-main">
+        <AnimatePresence mode="wait">
+          <motion.div
+            key={activeTab}
+            variants={pageVariants}
+            initial="initial"
+            animate="animate"
+            exit="exit"
+            transition={{ duration: 0.32, ease: [0.16, 1, 0.3, 1] }}
+          >
+            {renderPage()}
+          </motion.div>
+        </AnimatePresence>
       </main>
 
       <div className="shortcut-hint-bar">
